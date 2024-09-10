@@ -33,15 +33,17 @@ fn generate_bindings(alsa_library: &pkg_config::Library) {
     let mut codegen_config = bindgen::CodegenConfig::empty();
     codegen_config.insert(bindgen::CodegenConfig::FUNCTIONS);
     codegen_config.insert(bindgen::CodegenConfig::TYPES);
+    codegen_config.insert(bindgen::CodegenConfig::VARS);
 
     let builder = bindgen::Builder::default()
         .size_t_is_usize(true)
-        .whitelist_recursively(false)
+        .allowlist_recursively(false)
         .prepend_enum_name(false)
         .layout_tests(false)
-        .whitelist_function("snd_.*")
-        .whitelist_type("_?snd_.*")
-        .whitelist_type(".*va_list.*")
+        .allowlist_function("snd_.*")
+        .allowlist_type("_?snd_.*")
+        .allowlist_type(".*va_list.*")
+        .allowlist_var("SND_PCM_IOPLUG_.*")
         .with_codegen_config(codegen_config)
         .clang_args(clang_include_args)
         .header("wrapper.h")
